@@ -42,7 +42,7 @@ Public Class Startup
             .ClientSecret = "m7PdANK7Hpbp1YInvlJDaoXP"
             .AuthenticationType = "google"
             .SignInAsAuthenticationType = "ExternalCookie"
-            .CallbackPath = New PathString("/default1.aspx")
+            .CallbackPath = New PathString("/default.aspx")
             .Scope.Add("email")
             .Provider = New GoogleOAuth2AuthenticationProvider With
                 {
