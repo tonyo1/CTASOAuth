@@ -8,10 +8,12 @@ Public Class Login
 
     Protected Sub Page_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
 
-        If Not Page.IsPostBack Then
-            SetStatus()
+        'If Not Page.IsPostBack Then
+        '    SetStatus()
+        'End If
+        If Context.User.Identity Is Nothing Then
+            Response.Write("im nobody")
         End If
-
 
     End Sub
 
@@ -30,7 +32,7 @@ Public Class Login
     Protected Sub ButtonFrmClick(ByVal sender As Object, ByVal e As EventArgs)
         'check form variables and do old login
         IdentitySignin()
-        SetStatus()
+        Response.Redirect("default.aspx")
 
 
     End Sub
@@ -46,7 +48,7 @@ Public Class Login
 
     Protected Sub btnLogOut(ByVal sender As Object, ByVal e As EventArgs)
         IdentitySignout()
-        SetStatus()
+
     End Sub
 
     Public Sub IdentitySignin(Optional isPersistent As Boolean = False)
@@ -54,7 +56,7 @@ Public Class Login
 
         ' create required claims
         claims.Add(New Claim(ClaimTypes.NameIdentifier, "aaaa"))
-        claims.Add(New Claim(ClaimTypes.Name, "adasdf asdf asdf"))
+        claims.Add(New Claim(ClaimTypes.Name, "I logged in from form"))
         claims.Add(New Claim(ClaimTypes.Role, "Admin"))
 
         ' custom – my serialized AppUserState object - maybe

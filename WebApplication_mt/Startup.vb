@@ -11,8 +11,8 @@ Imports Microsoft.Owin.Security
 Imports Microsoft.AspNet.Identity.Owin
 Imports System.Security.Claims
 
-<Assembly: OwinStartup(GetType(Startup))> 
 
+<Assembly: OwinStartup(GetType(Startup))>
 
 Public Class Startup
     Public Sub Configuration(app As IAppBuilder)
@@ -42,13 +42,16 @@ Public Class Startup
             .ClientSecret = "m7PdANK7Hpbp1YInvlJDaoXP"
             .AuthenticationType = "google"
             .SignInAsAuthenticationType = "ExternalCookie"
-            .CallbackPath = New PathString("/default.aspx")
-
+            .CallbackPath = New PathString("/default1.aspx")
+            .Scope.Add("email")
             .Provider = New GoogleOAuth2AuthenticationProvider With
                 {
                 .OnAuthenticated = Function(context)
+                                       context.Identity.AddClaim(New Claim(ClaimTypes.NameIdentifier, "bbbb"))
+                                       context.Identity.AddClaim(New Claim(ClaimTypes.Name, "I logged in from elsewhere"))
+                                       context.Identity.AddClaim(New Claim(ClaimTypes.Role, "Admin"))
+                                       context.Identity.AddClaim(New Claim("userState", ""))
 
-                                       IdentitySignin(context)
                                        Return Task.FromResult(0)
                                    End Function
             }
@@ -61,27 +64,7 @@ Public Class Startup
         Return goa
     End Function
 
-    Public Sub IdentitySignin(ctx As GoogleOAuth2AuthenticatedContext, Optional isPersistent As Boolean = False)
-        Dim claims = New List(Of Claim)()
 
-        ' create required claims
-        claims.Add(New Claim(ClaimTypes.NameIdentifier, "aaaa"))
-        claims.Add(New Claim(ClaimTypes.Name, "adasdf asdf asdf"))
-        claims.Add(New Claim(ClaimTypes.Role, "Admin"))
-
-        ' custom – my serialized AppUserState object - maybe
-        claims.Add(New Claim("userState", "")) ' magic db here
-
-
-        Dim identity = New ClaimsIdentity(claims, DefaultAuthenticationTypes.ApplicationCookie)
-
-
-        'ctx.SignIn(New AuthenticationProperties() With {
-        '     .AllowRefresh = True,
-        '     .IsPersistent = isPersistent,
-        '     .ExpiresUtc = DateTime.UtcNow.AddDays(7)
-        '}, identity)
-    End Sub
 End Class
 
 
