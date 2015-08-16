@@ -15,7 +15,21 @@ Public Class Login
             Response.Write("im nobody")
         End If
 
+
+        'Try
+        '    Dim loginInfo = Await GetAuthenticationManager.GetExternalLoginInfoAsync()
+        '    Dim i = 1
+        'Catch ex As Exception
+        '    Dim i = 1
+        'End Try
+
+
+
+
+
+
     End Sub
+
 
     Protected Sub ButtonGoogleClick(sender As Object, e As EventArgs)
 
@@ -24,6 +38,7 @@ Public Class Login
 
         Dim properties = New AuthenticationProperties()
         properties.Dictionary.Add("login_hint ", "myemail@gmail.com")
+
         GetAuthenticationManager.Challenge(properties, "google")
 
 
@@ -82,4 +97,37 @@ Public Class Login
             Return Request.GetOwinContext().Authentication
         End Get
     End Property
+
+    Protected Sub LogIn(sender As Object, e As EventArgs)
+        'If IsValid Then
+        '    ' Validate the user password
+        '    Dim manager = Context.GetOwinContext().GetUserManager(Of ApplicationUserManager)()
+        '    Dim signinManager = Context.GetOwinContext().GetUserManager(Of ApplicationSignInManager)()
+
+        '    ' This doen't count login failures towards account lockout
+        '    ' To enable password failures to trigger lockout, change to shouldLockout := True
+        '    Dim result = signinManager.PasswordSignIn(Email.Text, Password.Text, RememberMe.Checked, shouldLockout:=False)
+
+        '    Select Case result
+        '        Case SignInStatus.Success
+        '            IdentityHelper.RedirectToReturnUrl(Request.QueryString("ReturnUrl"), Response)
+        '            Exit Select
+        '        Case SignInStatus.LockedOut
+        '            Response.Redirect("/Account/Lockout")
+        '            Exit Select
+        '        Case SignInStatus.RequiresVerification
+        '            Response.Redirect(String.Format("/Account/TwoFactorAuthenticationSignIn?ReturnUrl={0}&RememberMe={1}",
+        '                                            Request.QueryString("ReturnUrl"),
+        '                                            RememberMe.Checked),
+        '                              True)
+        '            Exit Select
+        '        Case Else
+        '            FailureText.Text = "Invalid login attempt"
+        '            ErrorMessage.Visible = True
+        '            Exit Select
+        '    End Select
+        'End If
+
+        Dim i = 1
+    End Sub
 End Class

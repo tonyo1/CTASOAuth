@@ -28,8 +28,9 @@ Public Class Startup
 
         app.UseExternalSignInCookie(DefaultAuthenticationTypes.ExternalCookie)
 
-        app.UseGoogleAuthentication(GetGoogleOption())
+        'app.UseGoogleAuthentication(clientSecret:="", clientId:="")
 
+        app.UseGoogleAuthentication(GetGoogleOption())
 
     End Sub
 
@@ -42,7 +43,7 @@ Public Class Startup
             .ClientSecret = "m7PdANK7Hpbp1YInvlJDaoXP"
             .AuthenticationType = "google"
             .SignInAsAuthenticationType = "ExternalCookie"
-            .CallbackPath = New PathString("/default.aspx")
+            '.CallbackPath = New PathString("/Login.aspx")
             .Scope.Add("email")
             .Provider = New GoogleOAuth2AuthenticationProvider With
                 {
@@ -51,11 +52,9 @@ Public Class Startup
                                        context.Identity.AddClaim(New Claim(ClaimTypes.Name, "I logged in from elsewhere"))
                                        context.Identity.AddClaim(New Claim(ClaimTypes.Role, "Admin"))
                                        context.Identity.AddClaim(New Claim("userState", ""))
-
                                        Return Task.FromResult(0)
                                    End Function
             }
-
 
         End With
 
