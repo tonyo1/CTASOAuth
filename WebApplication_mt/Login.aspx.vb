@@ -6,28 +6,37 @@ Imports Microsoft.AspNet.Identity
 Public Class Login
     Inherits System.Web.UI.Page
 
-    Protected Sub Page_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
+    Private const xsrf = "testsite*asdasd"
 
-        'If Not Page.IsPostBack Then
-        '    SetStatus()
-        'End If
-        If Context.User.Identity Is Nothing Then
-            Response.Write("im nobody")
+
+    Protected  async Sub Page_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
+
+        
+        ' check for external provider info
+        Dim loginInfo = Await AuthManager.GetExternalLoginInfoAsync()
+
+        ' if there is and we have no claims yet it's a new login
+        if not logInInfo Is nothing  
+              if not context.User.Identity.IsAuthenticated
+                 ' YOU ARE LOGGED IN            
+                 ExternalLoginCallback()                              
+              End If
+        End If    
+        
+    End Sub
+    
+   
+    ''' <summary>
+    ''' Called when you have a successful signin
+    ''' </summary>
+    Protected Sub ExternalLoginCallback()
+        ' YOU ARE SIGNED IN        
+        IdentitySignin(True)       
+        
+        Dim url = Request.QueryString("returnurl")        
+        If not String.IsNullOrEmpty(url)
+            Response.Redirect(url, false)                                
         End If
-
-
-        'Try
-        '    Dim loginInfo = Await GetAuthenticationManager.GetExternalLoginInfoAsync()
-        '    Dim i = 1
-        'Catch ex As Exception
-        '    Dim i = 1
-        'End Try
-
-
-
-
-
-
     End Sub
 
 
@@ -39,17 +48,23 @@ Public Class Login
         Dim properties = New AuthenticationProperties()
         properties.Dictionary.Add("login_hint ", "myemail@gmail.com")
 
-        GetAuthenticationManager.Challenge(properties, "google")
+        'etAuthenticationManager.Challenge(properties, "google")
 
 
+         'properties.RedirectUri = "login.asxp?returnurl=default.aspx"        
+         AuthManager.Challenge(properties, "google")
     End Sub
 
     Protected Sub ButtonFrmClick(ByVal sender As Object, ByVal e As EventArgs)
         'check form variables and do old login
         IdentitySignin()
-        Response.Redirect("default.aspx")
 
-
+        Dim url = Request.QueryString("returnurl")
+        If (String.IsNullOrEmpty(url))
+            url = "default.aspx"
+        End If
+        
+        Response.Redirect( url)
     End Sub
 
     Private Sub SetStatus()
@@ -71,7 +86,7 @@ Public Class Login
 
         ' create required claims
         claims.Add(New Claim(ClaimTypes.NameIdentifier, "aaaa"))
-        claims.Add(New Claim(ClaimTypes.Name, "I logged in from form"))
+        claims.Add(New Claim(ClaimTypes.Name, "BigMan"))
         claims.Add(New Claim(ClaimTypes.Role, "Admin"))
 
         ' custom – my serialized AppUserState object - maybe
@@ -79,9 +94,10 @@ Public Class Login
 
 
         Dim identity = New ClaimsIdentity(claims, DefaultAuthenticationTypes.ApplicationCookie)
+               
+       
 
-
-        GetAuthenticationManager.SignIn(New AuthenticationProperties() With { _
+        AuthManager.SignIn(New AuthenticationProperties() With { _
              .AllowRefresh = True, _
              .IsPersistent = isPersistent, _
              .ExpiresUtc = DateTime.UtcNow.AddDays(7) _
@@ -89,10 +105,10 @@ Public Class Login
     End Sub
 
     Public Sub IdentitySignout()
-        GetAuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie, DefaultAuthenticationTypes.ExternalCookie)
+        AuthManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie, DefaultAuthenticationTypes.ExternalCookie)
     End Sub
 
-    Private ReadOnly Property GetAuthenticationManager() As IAuthenticationManager
+    Private ReadOnly Property AuthManager() As IAuthenticationManager
         Get
             Return Request.GetOwinContext().Authentication
         End Get

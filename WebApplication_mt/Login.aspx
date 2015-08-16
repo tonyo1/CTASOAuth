@@ -1,4 +1,4 @@
-﻿<%@ Page Language="vb" AutoEventWireup="false" CodeBehind="Login.aspx.vb" Inherits="WebApplication_mt.Login" %>
+﻿<%@ Page Language="vb" AutoEventWireup="false" CodeBehind="Login.aspx.vb" Inherits="WebApplication_mt.Login" Async="true" %>
 
 <!DOCTYPE html>
 
@@ -7,6 +7,9 @@
     <title></title>
 </head>
 <body>
+    <a href="Login.aspx">Login</a> | <a href="Default.aspx">Default</a>
+    <hr />
+
     <form id="form1" runat="server">
         <div>
             login

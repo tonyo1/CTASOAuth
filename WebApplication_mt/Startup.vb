@@ -28,7 +28,8 @@ Public Class Startup
 
         app.UseExternalSignInCookie(DefaultAuthenticationTypes.ExternalCookie)
 
-        'app.UseGoogleAuthentication(clientSecret:="", clientId:="")
+        'app.UseGoogleAuthentication(clientSecret:="m7PdANK7Hpbp1YInvlJDaoXP",
+         '                           clientId:="1015270710557-c31v4iqa0qteec2sjg1r6je9ngopqn82.apps.googleusercontent.com")
 
         app.UseGoogleAuthentication(GetGoogleOption())
 
@@ -38,23 +39,33 @@ Public Class Startup
     Private Function GetGoogleOption() As GoogleOAuth2AuthenticationOptions
         Dim goa = New GoogleOAuth2AuthenticationOptions()
 
+    '.ClientId = "184894280102-smidfarnde1hhvbm0ai59vl1olb5s6eo.apps.googleusercontent.com"
+    '.ClientSecret = "laW4vQ9BBAiSPjTVD5auyFRl"
+
         With goa
             .ClientId = "1015270710557-c31v4iqa0qteec2sjg1r6je9ngopqn82.apps.googleusercontent.com"
             .ClientSecret = "m7PdANK7Hpbp1YInvlJDaoXP"
             .AuthenticationType = "google"
-            .SignInAsAuthenticationType = "ExternalCookie"
+            '.SignInAsAuthenticationType = "ExternalCookie"            
             '.CallbackPath = New PathString("/Login.aspx")
-            .Scope.Add("email")
-            .Provider = New GoogleOAuth2AuthenticationProvider With
-                {
-                .OnAuthenticated = Function(context)
-                                       context.Identity.AddClaim(New Claim(ClaimTypes.NameIdentifier, "bbbb"))
-                                       context.Identity.AddClaim(New Claim(ClaimTypes.Name, "I logged in from elsewhere"))
-                                       context.Identity.AddClaim(New Claim(ClaimTypes.Role, "Admin"))
-                                       context.Identity.AddClaim(New Claim("userState", ""))
-                                       Return Task.FromResult(0)
-                                   End Function
-            }
+            '.Scope.Add("email")
+            '.Provider = New GoogleOAuth2AuthenticationProvider With
+            '    {
+            '    .OnAuthenticated = Function(context)
+            '                           ' this does work now
+            '                           ' but - I would not use this and rather rely on single interface in
+            '                           ' login form
+
+            '                           'context.Identity.AddClaim(New Claim(ClaimTypes.NameIdentifier, "bbbb"))
+            '                           'context.Identity.AddClaim(New Claim(ClaimTypes.Name, "I logged in from elsewhere"))
+            '                           'context.Identity.AddClaim(New Claim(ClaimTypes.Role, "Admin"))
+            '                           'context.Identity.AddClaim(New Claim("userState", ""))
+
+            '                           'YOU ARE SIGNED IN        
+
+            '                           'Return Task.FromResult(0)
+            '                       End Function
+            '}
 
         End With
 

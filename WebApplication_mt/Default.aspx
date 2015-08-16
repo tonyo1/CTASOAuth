@@ -7,9 +7,13 @@
     <title></title>
 </head>
 <body>
+
+    <a href="Login.aspx">Login</a> | <a href="Default.aspx">Default</a>
+    <hr />
+
     <form id="form1" runat="server">
     <div>
-    default
+    default page
     </div>
     </form>
 </body>
