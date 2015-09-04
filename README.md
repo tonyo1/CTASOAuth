@@ -8,3 +8,7 @@ This was fairly challenging and there seems to be little documentation out there
 
 Good luck and if your reading this page, I hope it helps.
 
+
+
+You will need to fill in the correct credentials supplied from Googles developer api console. 
+---
